@@ -1,2 +1,19 @@
-{% assign variable = 'hello world' %}
-{{ variable | capitalize }}
+{% comment %} {{ content_for_index }} {% endcomment %}
+{% assign variable = 'hello!' %}
+<div id="special">{{ variable | capitalize }}</div>
+
+{% assign collection = collections['all'] %}
+{{ collection.title }}
+
+<ul>
+{% for product in collection.products %}
+    <li>
+        <a style="color:{{ settings.color_body_text }}" href="{{ product.url }}">
+            {{ product.title }} - {{ product.price | money }}
+            {% unless product.available %}
+                (SOLD OUT)
+            {% endunless %}
+        </a>
+    </li>
+{% endfor %}
+</ul>
