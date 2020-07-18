@@ -1,4 +1,94 @@
 // put your styles here
-#special {
-    color: yellow
+a {
+    text-decoration: none;
+    color: black;
+}
+#header_style {
+    display: grid;
+    grid-template-columns: 2fr 2fr .5fr;
+    align-items: center;
+}
+#header_style h3 {
+    margin-left: 2%;
+}
+
+#footer_position {
+    display: flex;
+    justify-content: center;
+}
+
+#footer_style {
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    margin: 1% 0;
+}
+
+#form-margin {
+    text-align: right;
+}
+
+#form-margin input {
+    border: none;
+    direction: rtl;
+    width: 80%;
+}
+#form-margin input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+#cart-margin {
+    margin: auto;
+}
+
+.img_align {
+    text-align: center;
+    height: 80%;
+    margin-bottom: 2%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.soldout_style {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    background-color: grey;
+    opacity: .5;
+}
+
+.shopify-section {
+    font-family: sans-serif;
+}
+
+#products_list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-column-gap: 1%;
+    grid-row-gap: 1%;
+    // display: grid;
+    // grid-template-columns: 1fr 1fr 1fr 1fr;
+    // grid-gap: 1%;
+    margin-bottom: 5%;
+}
+
+// .product_item {
+//     width: 30%;
+// }
+
+.product_item:hover {
+    opacity: .5;
+}
+
+.product_detail_box {
+    display: flex;
+    margin-top: 6%;
 }

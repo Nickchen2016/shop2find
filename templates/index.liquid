@@ -1,21 +1,39 @@
-{% comment %} {{ content_for_index }} {% endcomment %}
-{% assign variable = 'hello!' %}
-<div id="special">{{ variable | capitalize }}</div>
+<div id="slide-show"></div>
+
 
 {% assign collection = collections['all'] %}
 {{ collection.title }}
 
-<ul>
+<div id="products_list">
 {% for product in collection.products %}
-    <li>
-        <a style="color:{{ settings.color_body_text }}" href="{{ product.url }}">
-            {{ product.title }} - {{ product.price | money }}
-            {% unless product.available %}
-                (SOLD OUT)
-            {% endunless %}
+    <div class="product_item">
+        <a href="{{ product.url | within: collection }}">
+            <div class="img_align">
+            {% if product.featured_image != blank %}
+                    {% unless product.available %}
+                        <div class="soldout_style">SOLD OUT</div>
+                    {% endunless %}
+                    <img src="{{ product.featured_image | img_url: 'medium' }}">
+            {% endif %}
+            </div>
+            {% comment %} {% if product.featured_image != blank %}
+            <a href="{{ product.url | within: collection }}">
+                {% include 'responsive-image' with
+                image: product.featured_image,
+                max_width: 480,
+                max_height: 480
+                %}
+            </a>
+            {% endif %} {% endcomment %}
+            <div>
+                <div>
+                    {{ product.title }}
+                </div>
+                <div>
+                    {{ product.price | money }}   
+                </div>
+            </div>
         </a>
-    </li>
+    </div>
 {% endfor %}
-</ul>
-
-<div id="app"></div>
+</div>

@@ -25,32 +25,41 @@
     </div>
   {%- endif -%}
 
-  <header role="banner">
-    {% if template.name == 'index' %}
-      <h1>
-    {% else %}
-      <div class="h1">
-    {% endif %}
-        <a href="/" class="logo-image">
+  <header role="banner" id="header_style">
+      <h3>
           {% if section.settings.logo != blank %}
             {% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
             <img src="{{ section.settings.logo | img_url: image_size }}"
                 srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
                 alt="{{ section.settings.logo.alt | default: shop.name }}">
           {% else %}
-            {{ shop.name }}
+            <a href="/">
+              🛍 COMPANY NAME
+            </a>
           {% endif %}
-        </a>
-    {% if template.name == 'index' %}
-      </h1>
-    {% else %}
-      </div>
-    {% endif %}
+      </h3>
 
-    <a href="/cart">
+
+    <form action="/search" method="get" role="search" id="form-margin">
+
+      <input type="search"
+        name="q"
+        id="Search-{{ section.id }}"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.placeholder' | t }}">
+
+      <button type="submit" class="button">
+        {% include 'icon-search' %}
+      </button>
+    </form>
+
+    <a href="/cart" id="cart-margin">
       {% include 'icon-cart' %}
-      {{ 'layout.cart.title' | t }}
-      ({{ cart.item_count }} {{ 'layout.cart.items_count' | t: count: cart.item_count }})
+      {% comment %} {{ 'layout.cart.title' | t }} {% endcomment %}
+      {% if cart.item_count>0 %}
+        {{ cart.item_count }}
+      {% endif %}
+      {% comment %} {{ 'layout.cart.items_count' | t: count: cart.item_count }}) {% endcomment %}
     </a>
 
     {% if shop.customer_accounts_enabled %}
@@ -77,26 +86,9 @@
         {% endif %}
       </ul>
     {% endif %}
-
-    <form action="/search" method="get" role="search">
-      <label for="Search-{{ section.id }}" class="label-hidden">
-        {{ 'general.search.placeholder' | t }}
-      </label>
-
-      <input type="search"
-        name="q"
-        id="Search-{{ section.id }}"
-        value="{{ search.terms | escape }}"
-        placeholder="{{ 'general.search.placeholder' | t }}">
-
-      <button type="submit" class="button">
-        {% include 'icon-search' %}
-        <span class="icon-fallback-text">{{ 'general.search.submit' | t }}</span>
-      </button>
-    </form>
   </header>
 
-  <nav role="navigation">
+  {% comment %} <nav role="navigation">
     <ul>
       {% for link in linklists[section.settings.menu].links %}
         {% if link.links != blank %}
@@ -124,7 +116,7 @@
         {% endif %}
       {% endfor %}
     </ul>
-  </nav>
+  </nav> {% endcomment %}
 </section>
 
 {% if section.settings.logo != blank %}
