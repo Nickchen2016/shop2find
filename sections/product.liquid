@@ -34,43 +34,10 @@
 
   <div>
     <h1>{{ product.title }}</h1>
-    <p>{{ product.vendor }}</p>
+    {% comment %} <p>{{ product.vendor }}</p> {% endcomment %}
 
 
     {% form 'product', product, data-product-form: '', data-product-handle: product.handle, data-enable-history-state: 'true' %}
-      {% unless product.has_only_default_variant %}
-        {% for option in product.options_with_values %}
-          <div class="js">
-
-            {% if forloop.index0 > 0 %}
-
-              {% for value in option.values %}
-                <input type="radio" id="Option{{ option.position }}-{{ value }}" name="options[{{ option.name }}]" value="{{ value }}"{% if option.selected_value == value %} checked{% endif %}>
-                <label for="Option{{ option.position }}-{{ value }}">{{ value }}</label>
-              {% endfor %}
-
-            {% else %}
-
-              <label for="Option{{ option.position }}">
-                {{ option.name }}
-              </label>
-
-              <select
-                id="Option{{ option.position }}"
-                name="options[{{ option.name | escape }}]">
-                {% for value in option.values %}
-                  <option
-                    value="{{ value | escape }}"
-                    {% if option.selected_value == value %}selected="selected"{% endif %}>
-                      {{ value }}
-                  </option>
-                {% endfor %}
-              </select>
-
-            {% endif %}
-          </div>
-        {% endfor %}
-      {% endunless %}
 
       <noscript>
         <select name="id">
@@ -88,34 +55,77 @@
       <h1 data-product-price>
         {{ current_variant.price | money }}
       </h1>
+      {% if current_variant.available %}
+        <div id="input_info">
+          {% unless product.has_only_default_variant %}
+            {% for option in product.options_with_values %}
+              <div class="js">
 
-      <div data-price-wrapper>
-        <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
-        <input type="number" id="Quantity" name="quantity" value="1" min="1">
+                {% if forloop.index0 > 0 %}
 
-        {% if product.compare_at_price_max > product.price %}
-          <span class="visually-hidden" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
-          <s data-compare-price>
-            {% if current_variant.compare_at_price > current_variant.price %}
-              {{ current_variant.compare_at_price | money }}
+                  {% for value in option.values %}
+                    <input type="radio" id="Option{{ option.position }}-{{ value }}" name="options[{{ option.name }}]" value="{{ value }}"{% if option.selected_value == value %} checked{% endif %}>
+                    <label for="Option{{ option.position }}-{{ value }}">{{ value }}</label>
+                  {% endfor %}
+
+                {% else %}
+
+                  <label for="Option{{ option.position }}">
+                    {{ option.name }}
+                  </label>
+
+                  <select
+                    id="variant_id"
+                    v-model="form.id"
+                    name="options[{{ option.name | escape }}]">
+                    {% for variant in product.variants %}
+                      <option
+                        {% if variant == current_variant %}selected="selected"{% endif %}
+                        {% unless variant.available %}disabled="disabled"{% endunless %}
+                        value="{{ variant.id }}">
+                          {{ variant.title }}
+                      </option>
+                    {% endfor %}
+                    {% comment %} {% for value in option.values %}
+                      <option
+                        value="{{ value | escape }}"
+                        {% if option.selected_value == value %}selected="selected"{% endif %}>
+                          {{ value }}
+                      </option>
+                    {% endfor %} {% endcomment %}
+                  </select>
+
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endunless %}
+
+          <div data-price-wrapper>
+            <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+            <input type="number" v-model="form.quantity" id="Quantity" name="quantity" value="1" min="1">
+
+            {% if product.compare_at_price_max > product.price %}
+              <span class="visually-hidden" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
+              <s data-compare-price>
+                {% if current_variant.compare_at_price > current_variant.price %}
+                  {{ current_variant.compare_at_price | money }}
+                {% endif %}
+              </s>
             {% endif %}
-          </s>
-        {% endif %}
+          </div>
+
+          <button
+            type="button"
+            name="add"
+            @Click= "addToCart"
+            data-submit-button
+            {% unless current_variant.available %}disabled="disabled"{% endunless %}>
+              <span data-submit-button-text>
+                  {{ 'products.product.add_to_cart' | t }}
+              </span>
+          </button>
       </div>
-
-      <button
-        type="submit"
-        name="add"
-        data-submit-button
-        {% unless current_variant.available %}disabled="disabled"{% endunless %}>
-          <span data-submit-button-text>
-            {% if current_variant.available %}
-              {{ 'products.product.add_to_cart' | t }}
-            {% else %}
-              {{ 'products.product.sold_out' | t }}
-            {% endif %}
-          </span>
-      </button>
+    {% endif %}
     {% endform %}
 
     <div class="rte">
@@ -127,6 +137,7 @@
     {% endif %}
   </div>
 </section>
+{{ 'bundle.js' | asset_url | script_tag }}
 
 {% schema %}
   {

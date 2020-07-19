@@ -1,7 +1,9 @@
   
 import Vue from "vue";
-import Slider from "./components/Slider.vue";
+import axios from "axios";
+window.Vue = Vue;
+window.axios = axios;
 
-new Vue({
-    render: h => h(Slider)
-}).$mount("#slide-show");
+require("./components/ProductForm.js");
+
+

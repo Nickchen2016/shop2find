@@ -57,7 +57,13 @@
       {% include 'icon-cart' %}
       {% comment %} {{ 'layout.cart.title' | t }} {% endcomment %}
       {% if cart.item_count>0 %}
-        {{ cart.item_count }}
+        <div id="order_num" style="display:block">
+          {{ cart.item_count }}
+        </div>
+      {% else %}
+        <div id="order_num" style="display:none">
+          {{ cart.item_count }}
+        </div>
       {% endif %}
       {% comment %} {{ 'layout.cart.items_count' | t: count: cart.item_count }}) {% endcomment %}
     </a>

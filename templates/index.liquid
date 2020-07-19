@@ -2,7 +2,7 @@
 
 
 {% assign collection = collections['all'] %}
-{{ collection.title }}
+{% comment %} {{ collection.title }} {% endcomment %}
 
 <div id="products_list">
 {% for product in collection.products %}
